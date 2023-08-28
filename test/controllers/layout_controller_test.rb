@@ -1,6 +1,6 @@
 require "test_helper"
 
-class PostImageTest < ActiveSupport::TestCase
+class LayoutControllerTest < ActionDispatch::IntegrationTest
   # test "the truth" do
   #   assert true
   # end
