@@ -1,39 +1,56 @@
-<div class="box">
-
 <!DOCTYPE html>
 <html>
   <head>
     <title>Bookers2</title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
+    <script src="https://kit.fontawesome.com/d336be3f33.js" crossorigin="anonymous"></script>
     <%= stylesheet_pack_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
 
   <body>
-    <header class="navbar navbar-fixed-top navbar-inverse">
-      <div class="container">
-        <nav class='nav navbar-nav navbar-left' >
-        <div class="b">Bookers2</div>
-        </nav>
-        <nav>
-        <ul class="nav navbar-nav navbar-right">
-          <% if user_signed_in? %>
-            <li><%= link_to "Home", user_path(current_user.id),class:"glyphicon glyphicon-home" %></a></li>
-            <li><%= link_to "Users", "/users",class:"glyphicon glyphicon-user" %></a></li>
-            <li><%= link_to "Books", "/books",class:"glyphicon glyphicon-book" %></a></li>
-            <li><%= link_to "log out", destroy_user_session_path,class:" glyphicon  glyphicon-log-out",method: :delete %></li>
-
-          <% else %>
-            <li><%= link_to"Home",root_path,  class:"glyphicon glyphicon-home" %></li>
-            <li><%= link_to"About",homes_about_path,class:"glyphicon glyphicon-link" %></li>
-            <li><%= link_to"Sign up", "/users/sign_up",class:"glyphicon glyphicon-edit sign_up" %></li>
-            <li><%= link_to"login", "/users/sign_in",  class:"glyphicon glyphicon-log-in" %></li>
-          <% end %>
-        </ul>
-        </nav>
-      </div>
+    <header>
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+          <a class="nav-link text-light" href="/">
+            Bookers
+          </a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav ml-auto">
+              <li>
+                <a class="nav-link text-light" href="/">
+                <i class="fa-solid fa-house"></i>
+                 Home
+                </a>
+              </li>
+              <li>
+                <a class="nav-link text-light" href="/homes/about">
+                <i class="fa-solid fa-link"></i>
+                 About
+                </a>
+              </li>
+              <li>
+                <a class="nav-link text-light" href="/users/sign_up">
+                <i class="fa-solid fa-user-plus"></i>
+                 Sign up
+                </a>
+              </li>
+              <li>
+                <a class="nav-link text-light" href="/users/sign_in">
+                <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                 Log in
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
     </header>
 
     <div class= "body">
@@ -47,9 +64,9 @@
       <%= yield %>
 
     <footer>
-      <div class='container'>
-        <div class='row'>
-          <div class='col-xs-3 col-xs-offset-9'>
+      <div class="container mt-5">
+        <div class="row">
+          <div class="mx-auto">
             <p>CopyRight Infratop.inc</p>
           </div>
         </div>
