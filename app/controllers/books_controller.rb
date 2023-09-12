@@ -7,14 +7,14 @@ class BooksController < ApplicationController
   end
 
   def create
-    @user = current_user
-    @book = (current_user.id)
-      if @user.save
+    @book = Book.new(book_params)
+    @book.user_id = current_user.id
+      if @book.save
         flash[:notice] = "You have created book successfully."
         redirect_to user_path(current_user.id)
       else
         @books = Book.all
-        flash[:notice] = ' errors prohibited this obj from being saved:'
+        flash.now[:alert] = ' errors prohibited this obj from being saved:'
         render :index
       end
   end
@@ -28,6 +28,8 @@ class BooksController < ApplicationController
   def show
     @user = current_user
     @book = Book.find(params[:id])
+    @users = User.all
+    @books = Book.all
     @book_new = Book.new
   end
 
@@ -41,10 +43,9 @@ class BooksController < ApplicationController
       if @book.update(book_params)
         flash[:notice] = "You have creatad book successfully."
         redirect_to  book_path(@book.id)
-
       else
         @books = Book.all
-        flash[:notice] = ' errors prohibited this obj from being saved:'
+        flash.now[:alert] = ' errors prohibited this obj from being saved:'
         render "edit"
       end
   end
@@ -65,9 +66,9 @@ class BooksController < ApplicationController
     params.require(:user).permit(:name,:profile_image,:introduction)
   end
 
-  def  ensure_current_user
+  def ensure_current_user
     @book = Book.find(params[:id])
-     if @book.user_id = current_user.id
+     if @book.user_id != current_user.id
         redirect_to books_path
      end
   end
