@@ -1,5 +1,4 @@
 class UsersController < ApplicationController
-
   before_action :ensure_current_user, only: [:edit, :update, :destroy]
 
     def new
@@ -24,12 +23,12 @@ class UsersController < ApplicationController
     end
 
     def update
-      @user = User.find(params[:id])
+      @user = User.find(current_user.id)
       if @user.update(user_params)
       flash[:notice] = "User was successfully updated."
       redirect_to user_path(@user.id)
       else
-      flash[:alert] = "User update failed. Please check the form for errors."
+      flash.now[:alert] = "User update failed. Please check the form for errors."
       render :edit
       end
     end
@@ -40,11 +39,11 @@ class UsersController < ApplicationController
     end
 
     def user_params
-      params.require(:user).permit(:name,:profile_image,:introduction)
+      params.require(:book).permit(:name, :image, :introduction)
     end
 
     def ensure_current_user
-      @user = User.find(params[:id])
+      @user = User.find(current_user.id)
       if @user.id != current_user.id
       redirect_to user_path(current_user.id)
       end
