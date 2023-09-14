@@ -1,3 +1,11 @@
+<% if @user.errors.any? %>
+  <ul>
+    <% @user.errors.full_messages.each do |message| %>
+      <li><%= message %></li>
+    <% end %>
+  </ul>
+<% end %>
+
 <main>
   <div class="container">
     <div class="row">
@@ -6,12 +14,12 @@
         <%= form_with(model: @user, url: user_path(@user), method: :patch, html: { enctype: "multipart/form-data" }) do |form| %>
           <%= form.hidden_field :authenticity_token %>
           <div class="form-group">
-            <%= form.label :current_user_name, "Name" %>
-            <%= form.text_field :current_user_name, class: "form-control name", id: "user_name" %>
+            <%= form.label :name, "Name" %>
+            <%= form.text_field :name, class: "form-control name", id: "user_name" %>
           </div>
           <div class="form-group">
             <%= form.label :profile_image, "Image" %>
-            <%= form.file_field :profile_image, class: "form-control-file user_image", accept: "image/*", id: "user_profile_image" %>
+            <%= form.file_field :profile_image, class: "form-control-file user_profile_image", accept: "image/*", id: "user_profile_image" %>
           </div>
           <div class="form-group">
             <%= form.label :introduction, "Introduction" %>

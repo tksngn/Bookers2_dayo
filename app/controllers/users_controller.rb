@@ -13,7 +13,7 @@ class UsersController < ApplicationController
     end
 
     def edit
-      @user = User.find(current_user.id)
+      @user = User.find(params[:id])
     end
 
     def index
@@ -25,11 +25,11 @@ class UsersController < ApplicationController
     def update
       @user = User.find(current_user.id)
       if @user.update(user_params)
-      flash[:notice] = "User was successfully updated."
-      redirect_to user_path(@user.id)
+        flash[:notice] = "User was successfully updated."
+        redirect_to user_path(@user.id)
       else
-      flash.now[:alert] = "User update failed. Please check the form for errors."
-      render :edit
+        flash.now[:alert] = "User update failed. Please check the form for errors."
+        render :edit
       end
     end
 
@@ -39,7 +39,7 @@ class UsersController < ApplicationController
     end
 
     def user_params
-      params.require(:book).permit(:name, :image, :introduction)
+      params.require(:user).permit(:name, :profile_image, :introduction)
     end
 
     def ensure_current_user
