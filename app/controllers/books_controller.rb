@@ -1,6 +1,6 @@
 class BooksController < ApplicationController
   before_action :authenticate_user!
-  before_action :ensure_current_user, {only: [:edit,:update,:destroy]}
+  before_action :ensure_current_user, only: [:edit,:update,:destroy]
 
   def new
     @book = Book.new
@@ -14,7 +14,7 @@ class BooksController < ApplicationController
         redirect_to book_path(@book.id)
       else
         @books = Book.all
-        flash.now[:alert] = ' errors prohibited this obj from being saved:'
+        flash.now[:alert] = "errors prohibited this obj from being saved:"
         render :index
       end
   end
@@ -45,7 +45,7 @@ class BooksController < ApplicationController
         redirect_to  book_path(@book.id)
       else
         @books = Book.all
-        flash.now[:alert] = " errors prohibited this obj from being saved:"
+        flash.now[:alert]
         render :edit
       end
   end
@@ -59,7 +59,7 @@ class BooksController < ApplicationController
   private
 
   def book_params
-    params.require(:book).permit(:title, :opinion,)
+    params.require(:book).permit(:title, :opinion)
   end
 
   def user_params

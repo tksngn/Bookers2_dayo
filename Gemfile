@@ -58,3 +58,4 @@ gem 'devise'
 
 gem 'net-smtp'
 
+gem 'database_cleaner'

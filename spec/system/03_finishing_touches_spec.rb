@@ -272,7 +272,10 @@ describe '[STEP3] 仕上げのテスト' do
 
     describe '他人のユーザ詳細画面のテスト' do
       before do
-        visit user_path(other_user)
+        visit new_user_session_path
+        fill_in 'user[name]', with: user.name
+        fill_in 'user[password]', with: user.password
+        click_button 'Log in'
       end
 
       context '表示の確認' do
