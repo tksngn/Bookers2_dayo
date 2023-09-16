@@ -53,7 +53,8 @@ describe '[STEP3] 仕上げのテスト' do
       fill_in 'book[title]', with: Faker::Lorem.characters(number: 5)
       fill_in 'book[body]', with: Faker::Lorem.characters(number: 20)
       click_button 'Create Book'
-      is_expected.to have_content 'successfully'
+      expected_success_message = "You have created book successfully"
+      is_expected.to have_content(expected_success_message)
     end
     it '投稿データの更新成功時' do
       visit new_user_session_path
@@ -62,7 +63,8 @@ describe '[STEP3] 仕上げのテスト' do
       click_button 'Log in'
       visit edit_book_path(book)
       click_button 'Update Book'
-      is_expected.to have_content 'successfully'
+      expected_success_message = "You have updated book successfully"
+      is_expected.to have_content(expected_success_message)
     end
   end
 
@@ -125,7 +127,7 @@ describe '[STEP3] 仕上げのテスト' do
         click_button 'Log in'
         visit books_path
         @body = Faker::Lorem.characters(number: 19)
-        fill_in 'book[body]', with: @body
+        fill_in 'book[opinion]', with: @body
       end
 
       it '投稿が保存されない' do
@@ -134,12 +136,12 @@ describe '[STEP3] 仕上げのテスト' do
       it '投稿一覧画面を表示している' do
         click_button 'Create Book'
         expect(current_path).to eq '/books'
-        expect(page).to have_content book.body
-        expect(page).to have_content other_book.body
+        expect(page).to have_content book.opinion
+        expect(page).to have_content other_book.opinion
       end
       it '新規投稿フォームの内容が正しい' do
-        expect(find_field('book[title]').text).to be_blank
-        expect(page).to have_field 'book[body]', with: @body
+        expect(find_field('book[title]').value).to be_blank
+        expect(find_field('book[opinion]').value).to eq @body
       end
       it 'バリデーションエラーが表示される' do
         click_button 'Create Book'
@@ -165,7 +167,7 @@ describe '[STEP3] 仕上げのテスト' do
       it '投稿編集画面を表示しており、フォームの内容が正しい' do
         expect(current_path).to eq '/books/' + book.id.to_s
         expect(find_field('book[title]').text).to be_blank
-        expect(page).to have_field 'book[body]', with: book.body
+        expect(page).to have_field 'book[opinion]', with: book.opinion
       end
       it 'エラーメッセージが表示される' do
         expect(page).to have_content 'error'
@@ -229,7 +231,7 @@ describe '[STEP3] 仕上げのテスト' do
           expect(page).to have_content other_book.title
         end
         it '投稿のopinionが表示される' do
-          expect(page).to have_content other_book.body
+          expect(page).to have_content other_book.opinion
         end
         it '投稿の編集リンクが表示されない' do
           expect(page).not_to have_link 'Edit'
@@ -289,11 +291,11 @@ describe '[STEP3] 仕上げのテスト' do
           expect(page).to have_link other_book.title, href: book_path(other_book)
         end
         it '投稿一覧に他人の投稿のopinionが表示される' do
-          expect(page).to have_content other_book.body
+          expect(page).to have_content other_book.opinion
         end
         it '自分の投稿は表示されない' do
           expect(page).not_to have_content book.title
-          expect(page).not_to have_content book.body
+          expect(page).not_to have_content book.opinion
         end
       end
 

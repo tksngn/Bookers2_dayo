@@ -18,11 +18,11 @@ describe '[STEP1] ユーザログイン前のテスト' do
         log_in_link = find_all('a')[5].text
         expect(page).to have_link log_in_link, href: new_user_session_path
       end
-      it 'Sign upリンクが表示される: 緑色のボタンの表示が「Sign up」である' do
+      it 'Sign Upリンクが表示される: 緑色のボタンの表示が「Sign Up」である' do
         sign_up_link = find_all('a')[6].text
-        expect(sign_up_link).to match(/Sign up/)
+        expect(sign_up_link).to match(/Sign Up/)
       end
-      it 'Sign upリンクの内容が正しい' do
+      it 'Sign Upリンクの内容が正しい' do
         sign_up_link = find_all('a')[6].text
         expect(page).to have_link sign_up_link, href: new_user_registration_path
       end
@@ -59,7 +59,7 @@ describe '[STEP1] ユーザログイン前のテスト' do
         about_link = find_all('a')[2].text
         expect(about_link).to match(/About/)
       end
-      it 'Sign upリンクが表示される: 左上から4番目のリンクが「Sign up」である' do
+      it 'Sign Upリンクが表示される: 左上から4番目のリンクが「Sign Up」である' do
         signup_link = find_all('a')[3].text
         expect(signup_link).to match(/Sign up/)
       end
@@ -71,7 +71,7 @@ describe '[STEP1] ユーザログイン前のテスト' do
 
     context 'リンクの内容を確認' do
       subject { current_path }
-      
+
       it 'Bookersを押すと、トップ画面に遷移する' do
         home_link = find_all('a')[0].text
         home_link = home_link.delete(' ')
@@ -117,7 +117,7 @@ describe '[STEP1] ユーザログイン前のテスト' do
         expect(current_path).to eq '/users/sign_up'
       end
       it '「Sign up」と表示される' do
-        expect(page).to have_content 'Sign up'
+        expect(page).to have_content('Sign Up', exact: false, wait: )
       end
       it 'nameフォームが表示される' do
         expect(page).to have_field 'user[name]'
@@ -132,7 +132,7 @@ describe '[STEP1] ユーザログイン前のテスト' do
         expect(page).to have_field 'user[password_confirmation]'
       end
       it 'Sign upボタンが表示される' do
-        expect(page).to have_button 'Sign up'
+        expect(page).to have_button('Sign Up', exact: true, match: :prefer_exact)
       end
     end
 
@@ -145,10 +145,10 @@ describe '[STEP1] ユーザログイン前のテスト' do
       end
 
       it '正しく新規登録される' do
-        expect { click_button 'Sign up' }.to change(User.all, :count).by(1)
+        expect { click_button 'Sign Up' }.to change(User.all, :count).by(1)
       end
       it '新規登録後のリダイレクト先が、新規登録できたユーザの詳細画面になっている' do
-        click_button 'Sign up'
+        click_button 'Sign Up'
         expect(current_path).to eq '/users/' + User.last.id.to_s
       end
     end
