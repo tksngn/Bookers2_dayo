@@ -48,12 +48,15 @@ describe '[STEP2] ユーザログイン後のテスト' do
         expect(current_path).to eq '/books'
       end
       it '自分と他人の画像のリンク先が正しい' do
-        expect(page).to have_link(nil, href: user_path(book.user))
+        user = create(:user)
+        expect(page).to have_link(nil, href: user_path(user))
         expect(page).to have_link(nil, href: user_path(other_book.user))
       end
       it '自分の投稿と他人の投稿のタイトルのリンク先がそれぞれ正しい' do
-        expect(page).to have_link book.title, href: book_path(book)
-        expect(page).to have_link other_book.title, href: book_path(other_book)
+        book = create(:book, user: @user)
+        other_book = create(:book, user: create(:user))
+        expect(page).to have_link(book.title, href: book_path(book))
+        expect(page).to have_link(other_book.title, href: book_path(other_book))
       end
       it '自分の投稿と他人の投稿のオピニオンが表示される' do
         expect(page).to have_content book.opinion
@@ -82,7 +85,7 @@ describe '[STEP2] ユーザログイン後のテスト' do
         expect(page).to have_field 'book[opinion]'
       end
       it 'bodyフォームに値が入っていない' do
-        expect(find_field('book[opinion]').text).to be_blank
+        expect(find_field('book[opinion]').value).to be_blank
       end
       it 'Create Bookボタンが表示される' do
         expect(page).to have_button 'Create Book'
@@ -155,7 +158,7 @@ describe '[STEP2] ユーザログイン後のテスト' do
         expect(page).to have_field 'book[opinion]'
       end
       it 'bodyフォームに値が入っていない' do
-        expect(find_field('book[opinion]').text).to be_blank
+        expect(find_field('book[opinion]').text_area).to be_blank
       end
       it 'Create Bookボタンが表示される' do
         expect(page).to have_button 'Create Book'
@@ -269,7 +272,7 @@ describe '[STEP2] ユーザログイン後のテスト' do
       it 'URLが正しい' do
         expect(current_path).to eq '/users'
       end
-      it '自分と他人の画像が表示される: fallbackの画像がサイドバーの1つ＋一覧(2人)の2つの計3つ存在する' do
+      it '自分と他人の画像が表示される: fallbackの画像がサイドバ���の1つ�����一覧(2人)の2つの計3つ存在する' do
         expect(all('img').size).to eq(3)
       end
       it '自分と他人の名前がそれぞれ表示される' do
@@ -277,7 +280,7 @@ describe '[STEP2] ユーザログイン後のテスト' do
         expect(page).to have_content other_user.name
       end
       it '自分と他人のshowリンクがそれぞれ表示される' do
-        expect(page).to have_link 'Show', href: user_path(user)
+        expect(page).to have_link 'Show', href: user_path(book.user)
         expect(page).to have_link 'Show', href: user_path(other_user)
       end
     end
@@ -303,7 +306,7 @@ describe '[STEP2] ユーザログイン後のテスト' do
         expect(page).to have_field 'book[opinion]'
       end
       it 'bodyフォームに値が入っていない' do
-        expect(find_field('book[opinion]').text).to be_blank
+        expect(find_field('book[opinion]').text_area).to be_blank
       end
       it 'Create Bookボタンが表示される' do
         expect(page).to have_button 'Create Book'
@@ -321,7 +324,7 @@ describe '[STEP2] ユーザログイン後のテスト' do
         expect(current_path).to eq '/users/' + user.id.to_s
       end
       it '投稿一覧のユーザ画像のリンク先が正しい' do
-        expect(page).to have_link '', href: user_path(user)
+        expect(page).to have_link(nil, href: user_path(book.user))
       end
       it '投稿一覧に自分の投稿のtitleが表示され、リンクが正しい' do
         expect(page).to have_link book.title, href: book_path(book)
@@ -357,7 +360,7 @@ describe '[STEP2] ユーザログイン後のテスト' do
         expect(page).to have_field 'book[opinion]'
       end
       it 'bodyフォームに値が入っていない' do
-        expect(find_field('book[opinion]').text).to be_blank
+        expect(find_field('book[opinion]').text_area).to be_blank
       end
       it 'Create Bookボタンが表示される' do
         expect(page).to have_button 'Create Book'

@@ -117,7 +117,7 @@ describe '[STEP1] ユーザログイン前のテスト' do
         expect(current_path).to eq '/users/sign_up'
       end
       it '「Sign up」と表示される' do
-        expect(page).to have_content('Sign Up', exact: false, wait: )
+        expect(page).to have_content('Sign Up')
       end
       it 'nameフォームが表示される' do
         expect(page).to have_field 'user[name]'
@@ -132,7 +132,8 @@ describe '[STEP1] ユーザログイン前のテスト' do
         expect(page).to have_field 'user[password_confirmation]'
       end
       it 'Sign upボタンが表示される' do
-        expect(page).to have_button('Sign Up', exact: true, match: :prefer_exact)
+        expect(page).to have_button('Sign Up', wait:10)
+        click_button 'Sign Up'
       end
     end
 

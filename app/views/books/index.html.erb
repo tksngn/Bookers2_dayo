@@ -17,9 +17,9 @@
     <div class= "row">
       <div class= "col-md-3">
         <h2>User info</h2>
-        <tr>
-          <th><%= image_tag current_user.get_profile_image(100,100)%></th>
-        </tr>
+        <% if @book.profile_image.attached? %>
+          <%= image_tag @book.get_profile_image(100, 100) %>
+        <% end %>
         <table class="table">
           <tbody>
             <tr>
@@ -70,7 +70,7 @@
                     <%= image_tag book.get_profile_image(100,100) if book.profile_image.attached? %>
                   </td>
                   <td>
-                    <%= link_to book.title, book_path(book.id), class: 'book_' + book.id.to_s %>
+                    <%= link_to book.title, book_path(book.id), class: 'books_' + book.id.to_s %>
                   </td>
                   <th>
                     <%= book.opinion %>

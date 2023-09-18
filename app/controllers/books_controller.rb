@@ -45,21 +45,26 @@ class BooksController < ApplicationController
         redirect_to  book_path(@book.id)
       else
         @books = Book.all
-        flash.now[:alert]
+        flash.now[:alert] = "Failed to update the book."
         render :edit
       end
   end
 
   def destroy
     @book = Book.find(params[:id])
-    @book.destroy
-      redirect_to "/books"
+    if @book.user_id == current_user.id
+      @book.destroy
+      flash[:notice] = "Book has been deleted successfully."
+    else
+      flash[:alert] = "You don't have permission to delete this book."
+    end
+    redirect_to books_path
   end
 
   private
 
   def book_params
-    params.require(:book).permit(:title, :opinion)
+    params.require(:book).permit(:title, :opinion, :body)
   end
 
   def user_params
