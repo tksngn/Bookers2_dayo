@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Book, type: :model do
+RSpec.describe 'Bookモデルのテスト', type: :model do
   describe 'バリデーションのテスト' do
     subject { book.valid? }
 
@@ -16,15 +16,15 @@ RSpec.describe Book, type: :model do
 
     context 'bodyカラム' do
       it '空欄でないこと' do
-        book.opinion = ''
+        book.body = ''
         is_expected.to eq false
       end
       it '200文字以下であること: 200文字は〇' do
-        book.opinion = Faker::Lorem.characters(number: 200)
+        book.body = Faker::Lorem.characters(number: 200)
         is_expected.to eq true
       end
       it '200文字以下であること: 201文字は×' do
-        book.opinion = Faker::Lorem.characters(number: 201)
+        book.body = Faker::Lorem.characters(number: 201)
         is_expected.to eq false
       end
     end

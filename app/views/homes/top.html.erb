@@ -1,6 +1,6 @@
-<main>
-  <div class="container">
-    <div class="col-md-6 mx-auto mt-5">
+<div class="container">
+  <div class="row">
+    <div class="mx-auto col-11 col-sm-10 col-lg-8 col-xl-6">
       <h1>
         welcome to
         <i class="fa-solid fa-book"></i><strong>Bookers</strong>
@@ -12,7 +12,8 @@
       </p>
       <p>
          you can share and exchange your opinions , inpressions , and emotions
-
+      </p>
+      <p>
          about various books!
       </p>
 
@@ -21,9 +22,10 @@
           <%= link_to "Log in", new_user_session_path, class: "btn btn-info btn-sm btn-block mb-3 sign_in" %>
         </div>
         <div class="row">
-          <%= link_to "Sign Up", new_user_registration_path, class: "btn btn-success btn-sm btn-block sign_up" %>
+          <%= link_to "Sign up", new_user_registration_path, class: "btn btn-success btn-sm btn-block sign_up" %>
         </div>
       </div>
     </div>
   </div>
-</main>
+</div>
+

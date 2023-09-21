@@ -14,6 +14,10 @@ class UsersController < ApplicationController
 
     def edit
       @user = User.find(params[:id])
+      if @user == current_user
+      else
+        redirect_to user_path(current_user)
+      end
     end
 
     def index
@@ -40,7 +44,7 @@ class UsersController < ApplicationController
 
   private
     def book_params
-      params.require(:book).permit(:title, :opinion)
+      params.require(:book).permit(:title, :body)
     end
 
     def user_params

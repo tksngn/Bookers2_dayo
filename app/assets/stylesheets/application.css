@@ -14,28 +14,3 @@
  *= require_self
  */
 
-  @import "bootstrap-sprockets";
-  @import "bootstrap";
-
-*{
-  box-sizing: border-box;
- }
-
-.b {
-  font-size:20px;
-  Color:#FFFFFF;
-}
-
-.box{
-  padding: 80px;
-}
-
-.box2{
-  width: 600px;
-  height: 90px;
-  margin: 0 auto;
-}
-
-.btn-success {
-    background-color: #28a745;
-}

@@ -48,19 +48,16 @@ describe '[STEP2] ユーザログイン後のテスト' do
         expect(current_path).to eq '/books'
       end
       it '自分と他人の画像のリンク先が正しい' do
-        user = create(:user)
-        expect(page).to have_link(nil, href: user_path(user))
-        expect(page).to have_link(nil, href: user_path(other_book.user))
+        expect(page).to have_link '', href: user_path(book.user)
+        expect(page).to have_link '', href: user_path(other_book.user)
       end
       it '自分の投稿と他人の投稿のタイトルのリンク先がそれぞれ正しい' do
-        book = create(:book, user: @user)
-        other_book = create(:book, user: create(:user))
-        expect(page).to have_link(book.title, href: book_path(book))
-        expect(page).to have_link(other_book.title, href: book_path(other_book))
+        expect(page).to have_link book.title, href: book_path(book)
+        expect(page).to have_link other_book.title, href: book_path(other_book)
       end
       it '自分の投稿と他人の投稿のオピニオンが表示される' do
-        expect(page).to have_content book.opinion
-        expect(page).to have_content other_book.opinion
+        expect(page).to have_content book.body
+        expect(page).to have_content other_book.body
       end
     end
 
@@ -82,10 +79,10 @@ describe '[STEP2] ユーザログイン後のテスト' do
         expect(find_field('book[title]').text).to be_blank
       end
       it 'bodyフォームが表示される' do
-        expect(page).to have_field 'book[opinion]'
+        expect(page).to have_field 'book[body]'
       end
       it 'bodyフォームに値が入っていない' do
-        expect(find_field('book[opinion]').value).to be_blank
+        expect(find_field('book[body]').text).to be_blank
       end
       it 'Create Bookボタンが表示される' do
         expect(page).to have_button 'Create Book'
@@ -95,7 +92,7 @@ describe '[STEP2] ユーザログイン後のテスト' do
     context '投稿成功のテスト' do
       before do
         fill_in 'book[title]', with: Faker::Lorem.characters(number: 5)
-        fill_in 'book[opinion]', with: Faker::Lorem.characters(number: 20)
+        fill_in 'book[body]', with: Faker::Lorem.characters(number: 20)
       end
 
       it '自分の新しい投稿が正しく保存される' do
@@ -127,7 +124,7 @@ describe '[STEP2] ユーザログイン後のテスト' do
         expect(page).to have_content book.title
       end
       it '投稿のbodyが表示される' do
-        expect(page).to have_content book.opinion
+        expect(page).to have_content book.body
       end
       it '投稿の編集リンクが表示される' do
         expect(page).to have_link 'Edit', href: edit_book_path(book)
@@ -155,10 +152,10 @@ describe '[STEP2] ユーザログイン後のテスト' do
         expect(find_field('book[title]').text).to be_blank
       end
       it 'bodyフォームが表示される' do
-        expect(page).to have_field 'book[opinion]'
+        expect(page).to have_field 'book[body]'
       end
       it 'bodyフォームに値が入っていない' do
-        expect(find_field('book[opinion]').text_area).to be_blank
+        expect(find_field('book[body]').text).to be_blank
       end
       it 'Create Bookボタンが表示される' do
         expect(page).to have_button 'Create Book'
@@ -168,14 +165,14 @@ describe '[STEP2] ユーザログイン後のテスト' do
     context '投稿成功のテスト' do
       before do
         fill_in 'book[title]', with: Faker::Lorem.characters(number: 5)
-        fill_in 'book[opinion]', with: Faker::Lorem.characters(number: 20)
+        fill_in 'book[body]', with: Faker::Lorem.characters(number: 20)
       end
 
       it '自分の新しい投稿が正しく保存される' do
         expect { click_button 'Create Book' }.to change(user.books, :count).by(1)
       end
     end
-
+    
     # === ユーザーが本の投稿者である場合に編集画面に遷移する ===
     # BooksController > editのロジックが破綻していないかの妥当性を兼ねる
     # ==========================================================
@@ -228,7 +225,7 @@ describe '[STEP2] ユーザログイン後のテスト' do
         expect(page).to have_field 'book[title]', with: book.title
       end
       it 'body編集フォームが表示される' do
-        expect(page).to have_field 'book[opinion]', with: book.opinion
+        expect(page).to have_field 'book[body]', with: book.body
       end
       it 'Update Bookボタンが表示される' do
         expect(page).to have_button 'Update Book'
@@ -244,17 +241,17 @@ describe '[STEP2] ユーザログイン後のテスト' do
     context '編集成功のテスト' do
       before do
         @book_old_title = book.title
-        @book_old_opinion = book.opinion
+        @book_old_body = book.body
         fill_in 'book[title]', with: Faker::Lorem.characters(number: 4)
-        fill_in 'book[opinion]', with: Faker::Lorem.characters(number: 19)
+        fill_in 'book[body]', with: Faker::Lorem.characters(number: 19)
         click_button 'Update Book'
       end
 
       it 'titleが正しく更新される' do
-        expect(book.title).not_to eq @book_old_title
+        expect(book.reload.title).not_to eq @book_old_title
       end
       it 'bodyが正しく更新される' do
-        expect(book.opinion).not_to eq @book_old_opinion
+        expect(book.reload.body).not_to eq @book_old_body
       end
       it 'リダイレクト先が、更新した投稿の詳細画面になっている' do
         expect(current_path).to eq '/books/' + book.id.to_s
@@ -272,7 +269,7 @@ describe '[STEP2] ユーザログイン後のテスト' do
       it 'URLが正しい' do
         expect(current_path).to eq '/users'
       end
-      it '自分と他人の画像が表示される: fallbackの画像がサイドバ���の1つ�����一覧(2人)の2つの計3つ存在する' do
+      it '自分と他人の画像が表示される: fallbackの画像がサイドバーの1つ＋一覧(2人)の2つの計3つ存在する' do
         expect(all('img').size).to eq(3)
       end
       it '自分と他人の名前がそれぞれ表示される' do
@@ -280,7 +277,7 @@ describe '[STEP2] ユーザログイン後のテスト' do
         expect(page).to have_content other_user.name
       end
       it '自分と他人のshowリンクがそれぞれ表示される' do
-        expect(page).to have_link 'Show', href: user_path(book.user)
+        expect(page).to have_link 'Show', href: user_path(user)
         expect(page).to have_link 'Show', href: user_path(other_user)
       end
     end
@@ -303,10 +300,10 @@ describe '[STEP2] ユーザログイン後のテスト' do
         expect(find_field('book[title]').text).to be_blank
       end
       it 'bodyフォームが表示される' do
-        expect(page).to have_field 'book[opinion]'
+        expect(page).to have_field 'book[body]'
       end
       it 'bodyフォームに値が入っていない' do
-        expect(find_field('book[opinion]').text_area).to be_blank
+        expect(find_field('book[body]').text).to be_blank
       end
       it 'Create Bookボタンが表示される' do
         expect(page).to have_button 'Create Book'
@@ -324,18 +321,18 @@ describe '[STEP2] ユーザログイン後のテスト' do
         expect(current_path).to eq '/users/' + user.id.to_s
       end
       it '投稿一覧のユーザ画像のリンク先が正しい' do
-        expect(page).to have_link(nil, href: user_path(book.user))
+        expect(page).to have_link '', href: user_path(user)
       end
       it '投稿一覧に自分の投稿のtitleが表示され、リンクが正しい' do
         expect(page).to have_link book.title, href: book_path(book)
       end
       it '投稿一覧に自分の投稿のbodyが表示される' do
-        expect(page).to have_content book.opinion
+        expect(page).to have_content book.body
       end
       it '他人の投稿は表示されない' do
         expect(page).not_to have_link '', href: user_path(other_user)
         expect(page).not_to have_content other_book.title
-        expect(page).not_to have_content other_book.opinion
+        expect(page).not_to have_content other_book.body
       end
     end
 
@@ -357,10 +354,10 @@ describe '[STEP2] ユーザログイン後のテスト' do
         expect(find_field('book[title]').text).to be_blank
       end
       it 'bodyフォームが表示される' do
-        expect(page).to have_field 'book[opinion]'
+        expect(page).to have_field 'book[body]'
       end
       it 'bodyフォームに値が入っていない' do
-        expect(find_field('book[opinion]').text_area).to be_blank
+        expect(find_field('book[body]').text).to be_blank
       end
       it 'Create Bookボタンが表示される' do
         expect(page).to have_button 'Create Book'
