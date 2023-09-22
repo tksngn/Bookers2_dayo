@@ -35,19 +35,27 @@ class BooksController < ApplicationController
 
   def edit
     @book = Book.find(params[:id])
+    if @book.user_id != current_user.id
+      flash[:alert] = "You don't have permission to edit this book"
+      redirect_to books_path
+    end
   end
 
 
   def update
     @book = Book.find(params[:id])
-      if @book.update(book_params)
-        flash[:notice] = "You have updated book successfully."
-        redirect_to  book_path(@book.id)
-      else
-        @books = Book.all
-        flash.now[:alert] = "Failed to update the book."
-        render :edit
-      end
+    if @book.user_id != current_user.id
+      redirect_to books_path
+      return
+    end
+    if @book.update(book_params)
+      flash[:notice] = "You have updated book successfully."
+      redirect_to  book_path(@book.id)
+    else
+      @books = Book.all
+      flash.now[:alert] = "Failed to update the book."
+      render :edit
+    end
   end
 
   def destroy

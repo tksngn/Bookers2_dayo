@@ -14,10 +14,6 @@ class UsersController < ApplicationController
 
     def edit
       @user = User.find(params[:id])
-      if @user == current_user
-      else
-        redirect_to user_path(current_user)
-      end
     end
 
     def index
@@ -30,6 +26,7 @@ class UsersController < ApplicationController
       @user = User.find(params[:id])
       if @user == current_user
         if @user.update(user_params)
+          do_something_after_update
           flash[:notice] = "User was successfully updated."
           redirect_to user_path(@user.id)
         else
@@ -55,4 +52,10 @@ class UsersController < ApplicationController
       user = User.find(params[:id])
       redirect_to books_path unless user == current_user
     end
+
+    def do_something_after_update
+    # 更新後の処理をここに記述
+    # 例: ログを記録する、通知を送信する、など
+    end
+
 end
