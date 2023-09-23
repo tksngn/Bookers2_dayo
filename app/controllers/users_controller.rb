@@ -13,6 +13,10 @@ class UsersController < ApplicationController
     end
 
     def edit
+      user = User.find(params[:id])
+      unless user.id == current_user.id
+        redirect_to user_path(@user.id)
+      end
       @user = User.find(params[:id])
     end
 
@@ -24,18 +28,20 @@ class UsersController < ApplicationController
 
     def update
       @user = User.find(params[:id])
-      if @user == current_user
-        if @user.update(user_params)
-          do_something_after_update
-          flash[:notice] = "User was successfully updated."
-          redirect_to user_path(@user.id)
-        else
-          flash.now[:alert] = "User update failed. Please check the form for errors."
-          render :edit
-        end
-      else
+
+      unless @user.id == current_user.id
         flash[:alert] = "You do not have permission to edit this user."
-        redirect_to root_path
+        redirect_to user_path(@user.id)
+        return
+      end
+  # 以下のコードはユーザの権限が確認できた後に実行される
+      if @user.update(user_params)
+        do_something_after_update
+        flash[:notice] = "User was successfully updated."
+        redirect_to user_path(@user.id)
+      else
+        flash.now[:alert] = "User update failed. Please check the form for errors."
+        render :edit
       end
     end
 
@@ -50,7 +56,9 @@ class UsersController < ApplicationController
 
     def ensure_current_user
       user = User.find(params[:id])
-      redirect_to books_path unless user == current_user
+      unless user == current_user
+        redirect_to user_path(current_user)
+      end
     end
 
     def do_something_after_update
